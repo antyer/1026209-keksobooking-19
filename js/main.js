@@ -1,6 +1,6 @@
 'use strict';
 
-var ADVERT_TYPE = {'palace': 'Дворец', 'flat': 'Квартира', 'house': 'Дом', 'bungalo' : 'Бунгало'};
+var ADVERT_TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var TITLES = ['Уютная комната', 'Просторная квартира', 'Аппартаменты', 'Квартира бизнес-класса'];
 var CHECK_TIME = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -8,15 +8,12 @@ var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var MAP_WIDTH = 1200;
 var PIN_POS_YMIN = 130;
 var PIN_POS_YMAX = 630;
+
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 
 var PIN_TEMPLATE = document.querySelector('#pin').content.querySelector('button');
 var MAP_PINS = document.querySelector('.map__pins');
-
-var CARD_TEMPLATE = document.querySelector('#card').content.querySelector('.map__card');
-
-var adverts = generateAdvertsArray();
 
 function getRandomArrayItem(arrayData) {
   var randomIndex = getRndInteger(0, (arrayData.length - 1));
@@ -47,7 +44,7 @@ function generateAdvertsArray() {
         'title': getRandomArrayItem(TITLES),
         'address': getRndInteger(0, 1000) + ', ' + getRndInteger(0, 1000),
         'price': getRndInteger(1000, 10000),
-        'type': getRandomArrayItem(ADVERT_TYPE),
+        'type': getRandomArrayItem(ADVERT_TYPES),
         'rooms': getRndInteger(1, 3),
         'guests': getRndInteger(1, 3),
         'checkin': getRandomArrayItem(CHECK_TIME),
@@ -71,7 +68,9 @@ function generateAdvertsArray() {
 }
 
 function generateAdvertsDom() {
+  var adverts = generateAdvertsArray();
   var fragment = document.createDocumentFragment();
+
   adverts.forEach(function (item) {
     var pinNew = PIN_TEMPLATE.cloneNode(true);
     pinNew.style.left = item.offer.location.x - (PIN_WIDTH / 2) + 'px';
@@ -84,32 +83,4 @@ function generateAdvertsDom() {
   MAP_PINS.appendChild(fragment);
 }
 
-function generateAdvertCard(advert) {
-  var advertCard = CARD_TEMPLATE.cloneNode(true);
-  var advertsFragment = document.createDocumentFragment();
-  var photos = advert.offer.photos;
-  var PHOTO_TEMPLATE = advertCard.querySelector('.popup__photo');
-  var PHOTOS_TEMPLATE = advertCard.querySelector('.popup__photos');
-  PHOTOS_TEMPLATE.children[0].remove();
-
-  photos.forEach(function (item) {
-    var photo = PHOTO_TEMPLATE.cloneNode(true);
-    photo.src = item;
-    PHOTOS_TEMPLATE.appendChild(photo);
-  });
-  advertCard.querySelector('.popup__title').textContent = advert.offer.title;
-  advertCard.querySelector('.popup__text--address').textContent = advert.offer.address;
-  advertCard.querySelector('.popup__text--price').textContent = advert.offer.price + '₽/ночь';
-  advertCard.querySelector('.popup__type').textContent = advert.offer.type;
-  // advertCard.querySelector('.popup__text--capacity').textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей';
-  advertCard.querySelector('.popup__text--time').textContent = 'Заезд после' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
-  advertCard.querySelector('.popup__features').textContent = (advert.offer.features).toString();
-  advertCard.querySelector('.popup__description').textContent = advert.offer.description;
-  advertCard.querySelector('.popup__avatar').src = advert.author.avatar;
-
-  advertsFragment.appendChild(advertCard);
-  document.querySelector('.map__filters-container').before(advertsFragment);
-}
-
-generateAdvertsDom(adverts);
-generateAdvertCard(adverts[0]);
+generateAdvertsDom();
