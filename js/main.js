@@ -26,7 +26,7 @@ function getRndInteger(min, max) {
 
 function getRandomLengthArray(data) {
   var newRandArray = [];
-  var randIndex = getRndInteger(0, (data.length - 1));
+  var randIndex = getRndInteger(0, (data.length));
   for (var i = 0; i <= randIndex; i++) {
     newRandArray[i] = data[i];
   }
