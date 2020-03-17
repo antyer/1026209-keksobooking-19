@@ -1,10 +1,10 @@
 'use strict';
 
-var ADVERT_TYPE = {
-  'palace': 'Дворец',
-  'flat': 'Квартира',
-  'house': 'Дом',
-  'bungalo': 'Бунгало'
+var AdvertTypes = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalo: 'Бунгало'
 };
 var TITLES = ['Уютная комната', 'Просторная квартира', 'Аппартаменты', 'Квартира бизнес-класса'];
 var CHECK_TIME = ['12:00', '13:00', '14:00'];
@@ -52,7 +52,7 @@ function generateAdvertsArray() {
         'title': getRandomArrayItem(TITLES),
         'address': getRndInteger(0, 1000) + ', ' + getRndInteger(0, 1000),
         'price': getRndInteger(1000, 10000),
-        'type': getRandomArrayItem(ADVERT_TYPE),
+        'type': getRandomArrayItem(AdvertTypes),
         'rooms': getRndInteger(1, 3),
         'guests': getRndInteger(1, 3),
         'checkin': getRandomArrayItem(CHECK_TIME),
@@ -74,7 +74,7 @@ function generateAdvertsArray() {
   }
   return advertArray;
 }
-
+// Создаем метки на карте из массива случайных объявлений
 function generateAdvertsDom() {
   var fragment = document.createDocumentFragment();
   adverts.forEach(function (item) {
@@ -88,11 +88,12 @@ function generateAdvertsDom() {
 
   MAP_PINS.appendChild(fragment);
 }
-
+// Создаем popup карточку объявления
 function createAdvertCard(advert) {
   var CARD = CARD_TEMPLATE.cloneNode(true);
   var fragment = document.createDocumentFragment();
 
+  // Преобразуем ссылки из свойства photos обьекта advert в фрагмент с нодами
   function getPhotos(photos) {
     var PHOTO_TEMPLATE = CARD.querySelector('.popup__photo');
     var photosFragment = document.createDocumentFragment();
@@ -103,7 +104,7 @@ function createAdvertCard(advert) {
     });
     return photosFragment;
   }
-
+  // Преобразуем массив FEATURES в фрагмент из нод стилизованных картинками
   function getFeatures(features) {
     var featuresFragment = document.createDocumentFragment();
     features.forEach(function (item) {
@@ -113,7 +114,7 @@ function createAdvertCard(advert) {
     });
     return featuresFragment;
   }
-
+  // Заполняем склонированый шаблон карточки объявления
   CARD.querySelector('.popup__title').textContent = advert.offer.title;
   CARD.querySelector('.popup__text--address').textContent = advert.offer.address;
   CARD.querySelector('.popup__text--price').textContent = advert.offer.price + '₽/ночь';
@@ -128,6 +129,7 @@ function createAdvertCard(advert) {
   fragment.appendChild(CARD);
   document.querySelector('.map__filters-container').before(fragment);
 }
-
+// Создаем массивых случайных объявлений
 generateAdvertsDom(adverts);
+// Создаем карточку 1го по счету объявления в массиве согласно ТЗ
 createAdvertCard(adverts[0]);
