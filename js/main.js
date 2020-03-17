@@ -16,7 +16,7 @@ var PIN_TEMPLATE = document.querySelector('#pin').content.querySelector('button'
 var MAP_PINS = document.querySelector('.map__pins');
 
 function getRandomArrayItem(arrayData) {
-  var randomIndex = getRndInteger(0, (arrayData.length - 1));
+  var randomIndex = Math.floor(Math.random() * (arrayData.length));
   return arrayData[randomIndex];
 }
 
@@ -26,7 +26,7 @@ function getRndInteger(min, max) {
 
 function getRandomLengthArray(data) {
   var newRandArray = [];
-  var randIndex = getRndInteger(0, (data.length - 1));
+  var randIndex = Math.floor(Math.random() * (data.length));
   for (var i = 0; i <= randIndex; i++) {
     newRandArray[i] = data[i];
   }
@@ -42,11 +42,11 @@ function generateAdvertsArray() {
       },
       'offer': {
         'title': getRandomArrayItem(TITLES),
-        'address': getRndInteger(0, 1000) + ', ' + getRndInteger(0, 1000),
-        'price': getRndInteger(1000, 10000),
+        'address': Math.floor(Math.random() * 1000) + ', ' + Math.floor(Math.random() * 1000),
+        'price': 1000,
         'type': getRandomArrayItem(ADVERT_TYPES),
-        'rooms': getRndInteger(1, 3),
-        'guests': getRndInteger(1, 3),
+        'rooms': Math.floor(Math.random() * 3),
+        'guests': Math.floor(Math.random() * (3 - 0) + 3),
         'checkin': getRandomArrayItem(CHECK_TIME),
         'checkout': getRandomArrayItem(CHECK_TIME),
         'features': getRandomLengthArray(FEATURES),
@@ -58,7 +58,7 @@ function generateAdvertsArray() {
         ]),
         'location': {
           'x': getRndInteger(0, MAP_WIDTH),
-          'y': getRndInteger(PIN_POS_YMIN, PIN_POS_YMAX)
+          'y': getRndInteger(PIN_POS_YMIN, (PIN_POS_YMAX))
         }
       },
     };
